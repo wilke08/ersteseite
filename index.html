@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Filament &amp; Preise</title>
+  <style>
+    :root{--ink:#19271f;--muted:#6d7970;--green:#1d6548;--green-dark:#123e2e;--lime:#d7f3bd;--bg:#f5f6f1;--line:#dfe6dc;--white:#fff;--red:#ae443e;--amber:#986319;--shadow:0 18px 50px rgba(25,50,33,.08)}
+    *{box-sizing:border-box}
+    [hidden]{display:none!important}
+    body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    button:disabled{cursor:not-allowed;opacity:.55}
+    a{color:var(--green)}
+    .auth{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 80% 10%,#d7f3bd 0,transparent 26%),linear-gradient(145deg,#123e2e,#1c6548 60%,#2b7856)}
+    .auth-card{width:min(100%,440px);padding:40px;background:#fff;border-radius:24px;box-shadow:0 28px 80px rgba(0,0,0,.2)}
+    .auth-logo,.brand-mark{display:grid;place-items:center;width:44px;height:44px;border-radius:13px;background:var(--lime);color:var(--green-dark);font-weight:900;letter-spacing:-.06em}
+    .auth h1{margin:24px 0 8px;font-size:30px;line-height:1.1;letter-spacing:-.04em}
+    .auth p{color:var(--muted);margin:0 0 25px}
+    .auth label,.field label{display:block;margin:0 0 7px;font-size:12px;font-weight:750;letter-spacing:.035em;text-transform:uppercase;color:#53645a}
+    .auth input,.field input,.field select,.field textarea{width:100%;min-height:43px;border:1px solid #cdd8ce;border-radius:10px;background:#fff;color:var(--ink);padding:9px 12px;outline:none}
+    .auth input:focus,.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px #dcefe2}
+    .auth .field{margin-bottom:16px}
+    .auth .button{width:100%;justify-content:center;margin-top:8px}
+    .auth-foot{font-size:12px;margin-top:24px!important}
+    .auth-error{color:var(--red)!important;min-height:24px;margin:6px 0!important}
+    .layout{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+    .sidebar{background:#133d2d;color:#eaf6e7;padding:29px 16px;display:flex;flex-direction:column;gap:33px}
+    .brand{display:flex;align-items:center;gap:11px;padding:0 13px}
+    .brand strong{display:block;line-height:1.08;font-size:17px;letter-spacing:-.02em}
+    .brand small{display:block;color:#acc7b6;font-size:11px;margin-top:4px}
+    .nav{display:grid;gap:5px}
+    .nav button{width:100%;border:0;background:transparent;color:#c4ddcd;text-align:left;padding:12px 14px;border-radius:10px;font-weight:650}
+    .nav button:hover,.nav button.active{background:#275740;color:#fff}
+    .nav button span{display:inline-block;width:24px;color:#a7d7b9}
+    .sidebar-foot{margin-top:auto;padding:14px;color:#aac8b3;font-size:12px;border-top:1px solid #33634a}
+    .content{min-width:0;padding:24px clamp(20px,4vw,58px) 60px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:32px}
+    .crumb{font-size:13px;color:var(--muted);font-weight:700}
+    .top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .save-state{font-size:12px;color:var(--muted)}
+    .button{border:1px solid transparent;border-radius:10px;display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:9px 16px;font-weight:750;background:var(--green);color:#fff;text-decoration:none}
+    .button:hover{filter:brightness(.95)}
+    .button.secondary{background:#fff;color:var(--ink);border-color:var(--line)}
+    .button.ghost{background:transparent;color:var(--green);border-color:var(--line)}
+    .button.danger{background:#fff0ee;color:var(--red);border-color:#f0c7c2}
+    .button.small{min-height:34px;padding:6px 10px;font-size:12px}
+    .icon-button{border:1px solid var(--line);border-radius:9px;background:#fff;width:39px;height:39px;color:var(--ink)}
+    .page-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:23px}
+    .eyebrow{font-size:11px;font-weight:850;letter-spacing:.14em;text-transform:uppercase;color:var(--green)}
+    h1,h2,h3,p{margin-top:0}
+    h1{font-size:clamp(29px,3.3vw,42px);line-height:1.08;letter-spacing:-.05em;margin:7px 0 9px}
+    h2{font-size:21px;letter-spacing:-.03em;margin-bottom:8px}
+    h3{font-size:16px;letter-spacing:-.02em;margin-bottom:6px}
+    .subtle{color:var(--muted)}
+    .hero{position:relative;overflow:hidden;border-radius:22px;background:linear-gradient(120deg,#194c37,#226b4c);padding:34px 38px;color:#fff;box-shadow:var(--shadow);margin-bottom:20px}
+    .hero:after{content:"";position:absolute;right:-70px;top:-165px;width:390px;height:390px;border:60px solid rgba(215,243,189,.14);border-radius:50%}
+    .hero .eyebrow{color:#b9e6ba}
+    .hero h1{max-width:610px;margin-bottom:12px}
+    .hero p{max-width:580px;color:#d4e9d8;margin-bottom:20px}
+    .hero .button{background:#dcf5c5;color:#163d2d;position:relative;z-index:1}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}
+    .stat,.panel,.zone,.spool,.slot,.log-row{background:#fff;border:1px solid var(--line);border-radius:15px}
+    .stat{padding:19px 20px}
+    .stat small{display:block;color:var(--muted);font-weight:650}
+    .stat strong{display:block;font-size:30px;line-height:1.1;letter-spacing:-.04em;margin:9px 0 5px}
+    .stat em{font-style:normal;font-size:12px;color:var(--muted)}
+    .two-cols{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+    .panel{padding:22px;box-shadow:0 6px 28px rgba(27,65,37,.035)}
+    .panel-head,.zone-head,.row-between{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .panel-head{margin-bottom:13px}
+    .notice{border:1px solid #efdfb5;background:#fff9e9;color:#6f4b19;padding:15px 17px;border-radius:12px}
+    .notice p{margin:3px 0 0}
+    .notice strong{font-size:13px}
+    .empty{padding:20px;text-align:center;color:var(--muted);background:#f8faf6;border:1px dashed #d5ded3;border-radius:12px}
+    .mini-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #edf0ea}
+    .mini-row:last-child{border:0}
+    .mini-row strong{font-size:13px}
+    .mini-row span{color:var(--muted);font-size:12px}
+    .inventory{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+    .zone{padding:18px;min-width:0}
+    .zone-head{padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:13px}
+    .zone-head p{margin:0;color:var(--muted);font-size:12px}
+    .count{border-radius:99px;background:#eaf3e8;color:var(--green);padding:3px 9px;font-size:12px;font-weight:850}
+    .spool-list{display:grid;gap:10px}
+    .spool{padding:13px;box-shadow:0 4px 15px rgba(20,61,45,.025)}
+    .spool-top{display:flex;gap:9px;align-items:flex-start}
+    .swatch{display:inline-block;width:18px;height:18px;flex:none;border-radius:50%;border:1px solid #bfc8bc;box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);margin-top:2px}
+    .spool-title{min-width:0;flex:1}
+    .spool-title strong{display:block;font-size:13px;line-height:1.25}
+    .spool-title small{color:var(--muted);font-size:11px}
+    .spool-weight{font-weight:850;font-size:16px;margin:12px 0 7px}
+    .track{height:6px;border-radius:99px;background:#e9eee6;overflow:hidden}
+    .track i{display:block;height:100%;background:#54a476;border-radius:99px}
+    .spool-meta{font-size:11px;color:var(--muted);margin:7px 0 11px}
+    .spool-actions{display:flex;gap:6px;flex-wrap:wrap}
+    .slot{padding:9px;background:#f8faf6;margin-bottom:10px}
+    .slot-label{font-size:11px;font-weight:850;color:var(--green);margin:1px 4px 8px}
+    .slot .spool{margin:0}
+    .slot-empty{font-size:12px;color:var(--muted);padding:9px 4px}
+    .unassigned{margin-bottom:17px}
+    .unassigned-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:14px}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+    .field.wide{grid-column:1/-1}
+    .field textarea{min-height:75px;resize:vertical}
+    .field small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+    .dialog{border:1px solid var(--line);border-radius:20px;width:min(94vw,640px);max-height:90vh;padding:0;box-shadow:0 30px 90px rgba(0,0,0,.26)}
+    .dialog::backdrop{background:rgba(12,29,20,.53)}
+    .dialog-head{padding:24px 27px 15px;border-bottom:1px solid var(--line)}
+    .dialog-head h2{margin-bottom:4px}
+    .dialog-body{padding:23px 27px;overflow:auto;max-height:calc(90vh - 170px)}
+    .dialog-actions{display:flex;justify-content:flex-end;gap:9px;padding:15px 27px 24px}
+    .calc-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+    .quote-grid{display:grid;grid-template-columns:minmax(160px,1fr) 100px 115px 90px 34px;gap:8px;align-items:center}
+    .quote-head{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:9px 0}
+    .quote-line{padding:8px 0;border-top:1px solid #edf0ea}
+    .quote-line select,.quote-line input,.quote-name{width:100%;height:40px;border:1px solid #cdd8ce;border-radius:9px;padding:7px 9px;background:#fff;color:var(--ink)}
+    .quote-line .money{font-size:13px;text-align:right;font-weight:700}
+    .quote-total{font-size:40px;font-weight:850;letter-spacing:-.05em;color:var(--green-dark);margin:13px 0}
+    .breakdown{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #edf0ea;font-size:13px}
+    .breakdown:last-child{border:0}
+    .breakdown span{color:var(--muted)}
+    .log-list{display:grid;gap:9px}
+    .log-row{padding:14px 16px;display:flex;justify-content:space-between;gap:15px;align-items:center}
+    .log-row strong{font-size:13px}
+    .log-row small{display:block;color:var(--muted);margin-top:3px}
+    .log-right{text-align:right;flex:none}
+    .log-right b{display:block}
+    .log-right .button{margin-top:5px}
+    .settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .settings-grid .panel p{color:var(--muted);font-size:13px}
+    .settings-grid .field{margin-bottom:14px}
+    .settings-grid .button{margin-top:3px}
+    .help-list{padding-left:19px;color:var(--muted);font-size:13px}
+    .help-list li{margin:7px 0}
+    .toast{position:fixed;right:22px;bottom:22px;z-index:50;padding:12px 16px;border-radius:10px;background:#173e2c;color:#fff;box-shadow:var(--shadow);max-width:330px;font-size:13px}
+    @media(max-width:1100px){.inventory{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:850px){.layout{display:block}.sidebar{padding:12px 17px;gap:10px}.brand{padding:2px}.sidebar-foot{display:none}.nav{display:flex;overflow-x:auto}.nav button{white-space:nowrap;width:auto}.content{padding-top:21px}.calc-layout,.two-cols,.settings-grid{grid-template-columns:1fr}}
+    @media(max-width:620px){.auth-card{padding:28px}.content{padding:18px 15px 35px}.topbar{align-items:flex-start}.save-state{display:none}.page-head{align-items:flex-start;flex-direction:column}.inventory,.stats{grid-template-columns:1fr}.hero{padding:27px}.quote-grid{grid-template-columns:minmax(130px,1fr) 75px 80px 34px}.quote-head span:nth-child(3),.quote-line .unit-price{display:none}.form-grid{grid-template-columns:1fr}.field.wide{grid-column:auto}.dialog-body{padding:18px}.dialog-head,.dialog-actions{padding-left:18px;padding-right:18px}}
+  </style>
+</head>
+<body>
+  <section id="login-screen" class="auth">
+    <div class="auth-card">
+      <div class="auth-logo">F.</div>
+      <h1>Filament &amp; Preise</h1>
+      <p>Deine Druckkalkulation und dein Spulenbestand an einem Ort.</p>
+      <form id="login-form">
+        <div class="field"><label for="login-user">Benutzername</label><input id="login-user" name="user" autocomplete="username" required value="wilke.zimmermann"></div>
+        <div class="field"><label for="login-password">Passwort</label><input id="login-password" name="password" type="password" autocomplete="current-password" required></div>
+        <p id="login-error" class="auth-error" role="alert"></p>
+        <button class="button" type="submit">Bestand öffnen</button>
+      </form>
+      <p class="auth-foot">Deine gespeicherten Daten werden erst nach dem Entsperren entschlüsselt.</p>
+    </div>
+  </section>
+
+  <div id="app" class="layout" hidden>
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">F.</div><div><strong>Filament<br>&amp; Preise</strong><small>A1 Combo · Bestand &amp; Kalkulation</small></div></div>
+      <nav class="nav" aria-label="Hauptnavigation">
+        <button type="button" data-view="dashboard" class="active"><span>01</span> Übersicht</button>
+        <button type="button" data-view="library"><span>02</span> Filamentbibliothek</button>
+        <button type="button" data-view="calculator"><span>03</span> Kalkulation</button>
+        <button type="button" data-view="usage"><span>04</span> Verbrauch</button>
+        <button type="button" data-view="settings"><span>05</span> Einstellungen</button>
+      </nav>
+      <div class="sidebar-foot">Einzeldatei für Netlify<br>Stand lokal verschlüsselt</div>
+    </aside>
+    <div class="content">
+      <div class="topbar">
+        <div id="breadcrumb" class="crumb">Übersicht</div>
+        <div class="top-actions">
+          <span id="save-state" class="save-state">Bereit</span>
+          <button type="button" class="button small" data-action="save-html">HTML-Datei speichern</button>
+          <button type="button" class="icon-button" data-action="logout" title="Abmelden" aria-label="Abmelden">↪</button>
+        </div>
+      </div>
+
+      <main>
+        <section id="view-dashboard" class="view">
+          <div class="hero">
+            <span class="eyebrow">Dein Arbeitsbereich</span>
+            <h1>Alles im Blick, vom Filament bis zum Preis.</h1>
+            <p>Ordne jede Spule einem Platz zu, erfasse den tatsächlichen Verbrauch und kalkuliere neue Drucke mit dem passenden Kilopreis.</p>
+            <button type="button" class="button" data-view="library">Filamentbibliothek öffnen →</button>
+          </div>
+          <div id="dashboard-stats" class="stats"></div>
+          <div class="two-cols">
+            <div class="panel"><div class="panel-head"><h2>Bestand</h2><button type="button" class="button ghost small" data-view="library">Alle Spulen</button></div><div id="dashboard-attention"></div></div>
+            <div class="panel"><div class="panel-head"><h2>Letzter Verbrauch</h2><button type="button" class="button ghost small" data-view="usage">Protokoll</button></div><div id="dashboard-recent"></div></div>
+          </div>
+        </section>
+
+        <section id="view-library" class="view" hidden>
+          <div class="page-head"><div><span class="eyebrow">Bibliothek</span><h1>Deine Filamentspulen</h1><p class="subtle">Jede physische Spule hat einen eigenen Eintrag und einen eigenen Restbestand.</p></div><button type="button" class="button" data-action="add-spool">+ Spule hinzufügen</button></div>
+          <div id="unassigned-panel" class="panel unassigned" hidden><div class="panel-head"><div><h2>Aus Excel übernommen</h2><p class="subtle" style="margin:0;font-size:13px">Der Standort und der aktuelle Restbestand waren in der Tabelle nicht angegeben. Bitte ordne diese Spulen einmalig zu.</p></div><span id="unassigned-count" class="count"></span></div><div id="unassigned-list" class="unassigned-grid"></div></div>
+          <div class="inventory">
+            <div class="zone"><div class="zone-head"><div><h2>Im AMS</h2><p>Vier Plätze, direkt am Drucker</p></div><span id="ams-count" class="count">0</span></div><div id="ams-list"></div></div>
+            <div class="zone"><div class="zone-head"><div><h2>Angebrochen</h2><p>Geöffnete Spulen im Lager</p></div><span id="opened-count" class="count">0</span></div><div id="opened-list" class="spool-list"></div></div>
+            <div class="zone"><div class="zone-head"><div><h2>Frisch</h2><p>Ungeöffnete Spulen im Lager</p></div><span id="fresh-count" class="count">0</span></div><div id="fresh-list" class="spool-list"></div></div>
+          </div>
+        </section>
+
+        <section id="view-calculator" class="view" hidden>
+          <div class="page-head"><div><span class="eyebrow">Kalkulation</span><h1>Preis für einen Druck</h1><p class="subtle">Die Werte aus deiner Excel-Datei sind als Beispiel geladen. Die zweite Filamentauswahl verwendet hier ihren richtigen Kilopreis.</p></div></div>
+          <div class="calc-layout">
+            <div class="panel">
+              <div class="field" style="margin-bottom:19px"><label for="quote-name">Projekt oder Produkt</label><input id="quote-name" class="quote-name" placeholder="z. B. Namensschild"></div>
+              <div class="quote-grid quote-head"><span>Filament</span><span>Gramm</span><span>Preis pro g</span><span style="text-align:right">Kosten</span><span></span></div>
+              <div id="quote-lines"></div>
+              <button type="button" class="button ghost small" data-action="add-quote-line" style="margin-top:18px">+ Filament hinzufügen</button>
+            </div>
+            <div class="panel">
+              <span class="eyebrow">Ergebnis</span>
+              <div id="quote-total" class="quote-total">0,00 €</div>
+              <div class="breakdown"><span>Materialkosten</span><strong id="quote-material">0,00 €</strong></div>
+              <div class="breakdown"><span>Preisfaktor</span><strong id="quote-factor">5 ×</strong></div>
+              <div class="breakdown"><span>Verkaufspreis</span><strong id="quote-final">0,00 €</strong></div>
+              <p class="subtle" style="font-size:12px;margin:20px 0 0">Eine Kalkulation bucht keinen Verbrauch. Trage die tatsächlich verwendeten Gramm anschließend im Verbrauch ein.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-usage" class="view" hidden>
+          <div class="page-head"><div><span class="eyebrow">Verbrauch</span><h1>Drucke &amp; Korrekturen</h1><p class="subtle">Verbrauch wird immer von einer bestimmten Spule abgezogen.</p></div><button type="button" class="button" data-action="add-usage">+ Verbrauch eintragen</button></div>
+          <div class="panel"><div id="usage-summary" class="stats" style="margin-bottom:0"></div></div>
+          <div style="height:16px"></div>
+          <div id="usage-list" class="log-list"></div>
+        </section>
+
+        <section id="view-settings" class="view" hidden>
+          <div class="page-head"><div><span class="eyebrow">Einstellungen</span><h1>Kalkulation &amp; Datei</h1><p class="subtle">Hier änderst du den Preisfaktor, das Entsperrpasswort und speicherst deinen aktuellen Stand als HTML.</p></div></div>
+          <div class="settings-grid">
+            <div class="panel"><h2>Preisfaktor</h2><p>Deine Excel-Tabelle multipliziert die reinen Filamentkosten mit 5. Weitere Kosten werden derzeit nicht separat berechnet.</p><form id="factor-form"><div class="field"><label for="factor-input">Faktor</label><input id="factor-input" type="number" min="0.01" max="1000" step="0.01" required></div><button type="submit" class="button">Faktor speichern</button></form></div>
+            <div class="panel"><h2>HTML-Datei</h2><p>Jede Änderung wird im aktuellen Browser verschlüsselt gespeichert. Dieser Knopf erstellt eine vollständige neue HTML-Datei mit dem aktuellen Bestand. Lade sie anschließend erneut bei Netlify hoch.</p><button type="button" class="button" data-action="save-html">Aktuelle HTML speichern</button><p id="file-status" style="margin-top:14px"></p></div>
+            <div class="panel"><h2>Passwort ändern</h2><p>Das Passwort steht nicht lesbar im HTML. Nach einer Änderung speichere die HTML-Datei erneut und veröffentliche sie neu.</p><form id="password-form"><div class="field"><label for="new-password">Neues Passwort</label><input id="new-password" type="password" minlength="12" autocomplete="new-password" required><small>Mindestens 12 Zeichen empfohlen.</small></div><div class="field"><label for="repeat-password">Passwort wiederholen</label><input id="repeat-password" type="password" minlength="12" autocomplete="new-password" required></div><button type="submit" class="button secondary">Passwort ändern</button></form></div>
+            <div class="panel"><h2>Zugriff auf Netlify</h2><p>Diese Anmeldung verschlüsselt die Bestandsdaten. Für echten Zugriffsschutz auf die Website aktiviere zusätzlich den Passwortschutz oder privaten Zugriff in Netlify.</p><ul class="help-list"><li>Netlify: Project configuration → General → Visitor access.</li><li>Eine veröffentlichte HTML-Datei kann sich selbst auf Netlify nicht überschreiben.</li><li>Die Datei enthält keine Bambu-Zugangsdaten.</li></ul></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="spool-dialog" class="dialog">
+    <form id="spool-form" method="dialog">
+      <div class="dialog-head"><h2 id="spool-dialog-title">Spule hinzufügen</h2><p class="subtle" style="margin:0;font-size:13px">Marke, Material, Farbe und Preis gehören zu genau dieser Spule.</p></div>
+      <div class="dialog-body"><div class="form-grid">
+        <div class="field"><label for="spool-sku">Filament-Nr.</label><input id="spool-sku" maxlength="32" required></div>
+        <div class="field"><label for="spool-count">Anzahl neuer Spulen</label><input id="spool-count" type="number" min="1" max="50" step="1" value="1" required></div>
+        <div class="field"><label for="spool-brand">Marke</label><input id="spool-brand" maxlength="80" required></div>
+        <div class="field"><label for="spool-material">Material</label><input id="spool-material" maxlength="60" required></div>
+        <div class="field"><label for="spool-color">Farbe</label><input id="spool-color" maxlength="80" required></div>
+        <div class="field"><label for="spool-price">Preis pro kg (€)</label><input id="spool-price" type="number" min="0" step="0.01" required></div>
+        <div class="field"><label for="spool-net">Filament bei voller Spule (g)</label><input id="spool-net" type="number" min="1" step="0.01" value="1000" required></div>
+        <div class="field"><label for="spool-location">Platz</label><select id="spool-location" required><option value="fresh">Frisch im Lager</option><option value="opened">Angebrochen im Lager</option><option value="ams">Im AMS</option><option value="unassigned">Noch zuordnen</option></select></div>
+        <div id="remaining-field" class="field"><label for="spool-remaining">Aktuell auf der Spule (g)</label><input id="spool-remaining" type="number" min="0" step="0.01"><small>Bei „Frisch“ automatisch volles Gewicht.</small></div>
+        <div id="slot-field" class="field" hidden><label for="spool-slot">AMS-Platz</label><select id="spool-slot"><option value="">Platz wählen</option><option value="1">Platz 1</option><option value="2">Platz 2</option><option value="3">Platz 3</option><option value="4">Platz 4</option></select></div>
+        <div class="field wide"><label for="spool-note">Notiz (optional)</label><textarea id="spool-note" maxlength="500"></textarea></div>
+      </div></div>
+      <div class="dialog-actions"><button type="button" class="button secondary" data-action="close-dialog">Abbrechen</button><button type="submit" class="button">Spule speichern</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="usage-dialog" class="dialog">
+    <form id="usage-form" method="dialog">
+      <div class="dialog-head"><h2>Verbrauch eintragen</h2><p class="subtle" style="margin:0;font-size:13px">Die Menge wird direkt von der gewählten Spule abgezogen.</p></div>
+      <div class="dialog-body"><div class="form-grid">
+        <div class="field wide"><label for="usage-spool">Spule</label><select id="usage-spool" required></select></div>
+        <div class="field"><label for="usage-grams">Verbrauch (g)</label><input id="usage-grams" type="number" min="0.01" step="0.01" required></div>
+        <div class="field"><label for="usage-date">Datum</label><input id="usage-date" type="date" required></div>
+        <div class="field wide"><label for="usage-product">Druck oder Produkt</label><input id="usage-product" maxlength="120" placeholder="z. B. Schlüsselanhänger"></div>
+        <div class="field wide"><label for="usage-note">Notiz (optional)</label><textarea id="usage-note" maxlength="500" placeholder="Auch Stützmaterial und Ausschuss können erfasst werden."></textarea></div>
+      </div></div>
+      <div class="dialog-actions"><button type="button" class="button secondary" data-action="close-dialog">Abbrechen</button><button type="submit" class="button">Verbrauch buchen</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" hidden role="status"></div>
+  <script id="embedded-data" type="application/json">{"version":1,"updatedAt":1790718114487,"salt":"JmsXZ7YyeDDhcUDMn5CtkA==","iv":"3+KxfiZ2fEJXakGv","data":"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"}</script>
+  <script>
+  (function(){
+    "use strict";
+    var USERNAME = "wilke.zimmermann";
+    var STORAGE_KEY = "filament-preise-v1";
+    var ITERATIONS = 600000;
+    var sourceHtml = "";
+    var embeddedEnvelope = null;
+    var state = null;
+    var key = null;
+    var saltBytes = null;
+    var activeView = "dashboard";
+    var editingSpoolId = null;
+    var saveQueue = Promise.resolve();
+    var lastSavedAt = 0;
+    var toastTimer = null;
+    var enc = new TextEncoder();
+    var dec = new TextDecoder();
+    var euro = new Intl.NumberFormat("de-DE",{style:"currency",currency:"EUR"});
+    var num = new Intl.NumberFormat("de-DE",{maximumFractionDigits:2});
+    var num4 = new Intl.NumberFormat("de-DE",{minimumFractionDigits:4,maximumFractionDigits:4});
+
+    function byId(id){return document.getElementById(id)}
+    function h(value){return String(value == null ? "" : value).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+    function g(value){return value == null ? "Noch eintragen" : num.format(value)+" g"}
+    function b64(bytes){var s="";bytes.forEach(function(x){s+=String.fromCharCode(x)});return btoa(s)}
+    function unb64(text){var s=atob(text);var out=new Uint8Array(s.length);for(var i=0;i<s.length;i++)out[i]=s.charCodeAt(i);return out}
+    function uuid(){return crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+"-"+Math.random().toString(36).slice(2)}
+    function spoolName(spool){return spool.brand+" "+spool.material+" · "+spool.color}
+    function spoolLabel(spool){return spoolName(spool)+" · Nr. "+spool.sku+" / Spule "+spool.copyNo}
+    function bySpool(id){return state.spools.find(function(x){return x.id===id})}
+    function toast(message){var el=byId("toast");el.textContent=message;el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.hidden=true},4200)}
+    function localEnvelope(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))}catch(e){return null}}
+    function newestEnvelope(){var local=localEnvelope();return local && local.updatedAt>embeddedEnvelope.updatedAt ? local : embeddedEnvelope}
+    async function derive(password,salt){var base=await crypto.subtle.importKey("raw",enc.encode(password),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt:salt,iterations:ITERATIONS,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
+    async function decrypt(envelope,password){var s=unb64(envelope.salt);var k=await derive(password,s);var plain=await crypto.subtle.decrypt({name:"AES-GCM",iv:unb64(envelope.iv)},k,unb64(envelope.data));var parsed=JSON.parse(dec.decode(plain));if(!parsed || parsed.version!==1 || !Array.isArray(parsed.spools) || !Array.isArray(parsed.history))throw Error("Datenformat ungültig");return {state:parsed,key:k,salt:s}}
+    async function encryptState(snapshot){var iv=crypto.getRandomValues(new Uint8Array(12));var plain=enc.encode(snapshot);var cipher=await crypto.subtle.encrypt({name:"AES-GCM",iv:iv},key,plain);lastSavedAt=Math.max(Date.now(),lastSavedAt+1);return {version:1,updatedAt:lastSavedAt,salt:b64(saltBytes),iv:b64(iv),data:b64(new Uint8Array(cipher))}}
+    function queueSave(){if(!state)return;state.updatedAt=new Date().toISOString();var snapshot=JSON.stringify(state);byId("save-state").textContent="Speichert …";saveQueue=saveQueue.then(async function(){var envelope=await encryptState(snapshot);localStorage.setItem(STORAGE_KEY,JSON.stringify(envelope));byId("save-state").textContent="Im Browser gespeichert"}).catch(function(){byId("save-state").textContent="Speichern fehlgeschlagen";toast("Speichern im Browser fehlgeschlagen. Bitte HTML-Datei sichern.")});return saveQueue}
+    function commit(){queueSave();render()}
+    function showView(name){activeView=name;document.querySelectorAll(".view").forEach(function(el){el.hidden=el.id!=="view-"+name});document.querySelectorAll(".nav [data-view]").forEach(function(el){el.classList.toggle("active",el.dataset.view===name)});var labels={dashboard:"Übersicht",library:"Filamentbibliothek",calculator:"Kalkulation",usage:"Verbrauch",settings:"Einstellungen"};byId("breadcrumb").textContent=labels[name]||"";window.scrollTo(0,0)}
+    function stat(label,value,detail){return '<div class="stat"><small>'+h(label)+'</small><strong>'+h(value)+'</strong><em>'+h(detail)+'</em></div>'}
+    function renderDashboard(){
+      var known=state.spools.filter(function(x){return x.location!=="unassigned" && x.remainingG!=null});
+      var totalGrams=known.reduce(function(a,x){return a+x.remainingG},0);
+      var totalValue=known.reduce(function(a,x){return a+x.remainingG*x.priceKg/1000},0);
+      byId("dashboard-stats").innerHTML=stat("Im AMS",state.spools.filter(function(x){return x.location==="ams"}).length+" / 4","eingespannte Spulen")+stat("Angebrochen",state.spools.filter(function(x){return x.location==="opened"}).length,"Spulen im Lager")+stat("Frisch",state.spools.filter(function(x){return x.location==="fresh"}).length,"ungeöffnete Spulen")+stat("Erfasster Bestand",num.format(totalGrams)+" g",euro.format(totalValue)+" Materialwert");
+      var unknown=state.spools.filter(function(x){return x.location==="unassigned"});
+      var low=known.filter(function(x){return x.remainingG>0 && x.remainingG<=150});
+      var attention=byId("dashboard-attention");
+      if(unknown.length){attention.innerHTML='<div class="notice"><strong>'+unknown.length+' importierte Spulen zuordnen</strong><p>Excel enthielt keine Information zu Standort oder Restgramm. Erfasse diese Werte in der Bibliothek.</p></div>'}
+      else if(low.length){attention.innerHTML='<div class="notice"><strong>'+low.length+' Spulen unter 150 g</strong><p>'+h(low.map(spoolName).join(", "))+'</p></div>'}
+      else{attention.innerHTML='<div class="empty">Alle Spulen sind zugeordnet. Hier erscheinen Hinweise zu niedrigem Bestand.</div>'}
+      var recent=state.history.slice().reverse().filter(function(x){return x.type==="consumption"}).slice(0,4);
+      byId("dashboard-recent").innerHTML=recent.length ? recent.map(function(x){return '<div class="mini-row"><div><strong>'+h(x.product||"Druck")+'</strong><br><span>'+h(x.spoolLabel)+'</span></div><strong>−'+h(num.format(-x.deltaG))+' g</strong></div>'}).join("") : '<div class="empty">Noch kein Verbrauch erfasst.</div>';
+    }
+    function swatch(color){var c=String(color).toLowerCase();if(c.indexOf("weiß")>=0||c.indexOf("weiss")>=0)return "#f6f6f2";if(c.indexOf("schwarz")>=0)return "#272b29";if(c.indexOf("gelb")>=0)return "#e5f342";if(c.indexOf("orange")>=0)return "#d77d33";if(c.indexOf("grün")>=0||c.indexOf("gruen")>=0)return "#1c694b";return "#abbeb0"}
+    function spoolCard(spool){
+      var percent=spool.remainingG==null?0:Math.max(0,Math.min(100,spool.remainingG/spool.netG*100));
+      var foot=spool.remainingG==null ? "Restmenge unbekannt" : euro.format(spool.remainingG*spool.priceKg/1000)+" Restwert";
+      return '<article class="spool"><div class="spool-top"><i class="swatch" style="background:'+swatch(spool.color)+'"></i><div class="spool-title"><strong>'+h(spoolName(spool))+'</strong><small>Nr. '+h(spool.sku)+' · Spule '+h(spool.copyNo)+'</small></div></div><div class="spool-weight">'+h(g(spool.remainingG))+'</div><div class="track"><i style="width:'+percent+'%"></i></div><div class="spool-meta">'+h(foot)+' · '+h(euro.format(spool.priceKg))+'/kg</div><div class="spool-actions">'+(spool.location==="unassigned"?'':'<button type="button" class="button small" data-action="consume" data-id="'+h(spool.id)+'">Verbrauch</button>')+'<button type="button" class="button secondary small" data-action="edit-spool" data-id="'+h(spool.id)+'">'+(spool.location==="unassigned"?"Zuordnen":"Bearbeiten")+'</button><button type="button" class="button danger small" data-action="delete-spool" data-id="'+h(spool.id)+'">×</button></div></article>'
+    }
+    function renderLibrary(){
+      var unknown=state.spools.filter(function(x){return x.location==="unassigned"});
+      byId("unassigned-panel").hidden=!unknown.length;byId("unassigned-count").textContent=String(unknown.length);byId("unassigned-list").innerHTML=unknown.map(spoolCard).join("");
+      var ams=state.spools.filter(function(x){return x.location==="ams"}),opened=state.spools.filter(function(x){return x.location==="opened"}),fresh=state.spools.filter(function(x){return x.location==="fresh"});
+      byId("ams-count").textContent=String(ams.length);byId("opened-count").textContent=String(opened.length);byId("fresh-count").textContent=String(fresh.length);
+      byId("ams-list").innerHTML=[1,2,3,4].map(function(slot){var x=ams.find(function(s){return s.amsSlot===slot});return '<div class="slot"><div class="slot-label">AMS-Platz '+slot+'</div>'+(x?spoolCard(x):'<div class="slot-empty">Platz frei</div>')+'</div>'}).join("");
+      byId("opened-list").innerHTML=opened.length?opened.map(spoolCard).join(""):'<div class="empty">Keine angebrochenen Spulen im Lager.</div>';
+      byId("fresh-list").innerHTML=fresh.length?fresh.map(spoolCard).join(""):'<div class="empty">Keine frischen Spulen im Lager.</div>';
+    }
+    function renderCalculator(){
+      byId("quote-name").value=state.quote.name||"";
+      var options=state.spools.slice().sort(function(a,b){return spoolLabel(a).localeCompare(spoolLabel(b),"de")});
+      var material=0;
+      byId("quote-lines").innerHTML=state.quote.lines.map(function(line){var spool=bySpool(line.spoolId);var cost=spool ? (Number(line.grams)||0)*spool.priceKg/1000 : 0;material+=cost;return '<div class="quote-grid quote-line" data-line="'+h(line.id)+'"><select class="quote-input" data-field="spoolId" aria-label="Filament"><option value="">Filament wählen</option>'+options.map(function(x){return '<option value="'+h(x.id)+'"'+(line.spoolId===x.id?" selected":"")+'>'+h(spoolLabel(x))+'</option>'}).join("")+'</select><input class="quote-input" data-field="grams" type="number" min="0" step="0.01" value="'+h(line.grams)+'" aria-label="Gramm"><span class="unit-price subtle">'+(spool?h(num4.format(spool.priceKg/1000))+" €":"–")+'</span><span class="money">'+h(euro.format(cost))+'</span><button type="button" class="icon-button" data-action="remove-quote-line" data-id="'+h(line.id)+'" aria-label="Zeile entfernen">×</button></div>'}).join("");
+      var price=material*state.settings.factor;
+      byId("quote-total").textContent=euro.format(price);byId("quote-material").textContent=euro.format(material);byId("quote-factor").textContent=num.format(state.settings.factor)+" ×";byId("quote-final").textContent=euro.format(price);
+    }
+    function renderUsage(){
+      var entries=state.history.slice().reverse();
+      var consumed=state.history.filter(function(x){return x.type==="consumption"}).reduce(function(a,x){return a-x.deltaG},0);
+      var spent=state.history.filter(function(x){return x.type==="consumption"}).reduce(function(a,x){return a+(x.cost||0)},0);
+      byId("usage-summary").innerHTML=stat("Verbrauch gebucht",num.format(consumed)+" g","seit Beginn der Erfassung")+stat("Materialkosten",euro.format(spent),"historische Kilopreise")+stat("Druckeinträge",state.history.filter(function(x){return x.type==="consumption"}).length,"manuell erfasst")+stat("Korrekturen",state.history.filter(function(x){return x.type==="adjustment"}).length,"Bestand manuell angepasst");
+      byId("usage-list").innerHTML=entries.length?entries.map(function(x){return '<article class="log-row"><div><strong>'+h(x.type==="consumption"?(x.product||"Druck"):"Bestandskorrektur")+'</strong><small>'+h(x.date)+' · '+h(x.spoolLabel)+(x.note?" · "+h(x.note):"")+'</small></div><div class="log-right"><b style="color:'+(x.deltaG<0?"var(--red)":"var(--green)")+'">'+(x.deltaG>0?"+":"")+h(num.format(x.deltaG))+' g</b><small>'+h(euro.format(Math.abs(x.cost||0)))+'</small>'+(x.type==="consumption"?'<button type="button" class="button ghost small" data-action="undo-usage" data-id="'+h(x.id)+'">Rückgängig</button>':"")+'</div></article>'}).join(""):'<div class="panel empty">Noch keine Verbrauchsbuchung. Mit „Verbrauch eintragen“ ziehst du Gramm von einer Spule ab.</div>';
+    }
+    function renderSettings(){byId("factor-input").value=state.settings.factor;var local=localEnvelope();byId("file-status").textContent=local&&local.updatedAt>embeddedEnvelope.updatedAt?"Deine Änderungen sind im Browser neuer als in der veröffentlichten HTML-Datei.":"Der veröffentlichte HTML-Stand ist aktuell oder neuer."}
+    function render(){renderDashboard();renderLibrary();renderCalculator();renderUsage();renderSettings()}
+    function updateSpoolFields(){var location=byId("spool-location").value;var fresh=location==="fresh";byId("remaining-field").hidden=fresh||location==="unassigned";byId("slot-field").hidden=location!=="ams";byId("spool-remaining").required=location==="opened"||location==="ams";byId("spool-slot").required=location==="ams";if(fresh)byId("spool-remaining").value=byId("spool-net").value}
+    function openSpool(id){
+      editingSpoolId=id||null;var form=byId("spool-form");form.reset();var x=id?bySpool(id):null;
+      byId("spool-dialog-title").textContent=x?"Spule bearbeiten":"Spule hinzufügen";
+      byId("spool-count").disabled=!!x;byId("spool-count").closest(".field").hidden=!!x;
+      byId("spool-sku").value=x?x.sku:"";byId("spool-brand").value=x?x.brand:"";byId("spool-material").value=x?x.material:"";byId("spool-color").value=x?x.color:"";byId("spool-price").value=x?x.priceKg:"";byId("spool-net").value=x?x.netG:1000;byId("spool-location").value=x?x.location:"fresh";byId("spool-remaining").value=x&&x.remainingG!=null?x.remainingG:"";byId("spool-slot").value=x&&x.amsSlot?x.amsSlot:"";byId("spool-note").value=x?x.note||"":"";updateSpoolFields();byId("spool-dialog").showModal()
+    }
+    function openUsage(id){
+      var candidates=state.spools.filter(function(x){return x.location!=="unassigned" && x.remainingG>0});
+      if(!candidates.length){toast("Ordne zuerst eine Spule mit Restbestand zu.");showView("library");return}
+      byId("usage-form").reset();byId("usage-spool").innerHTML=candidates.map(function(x){return '<option value="'+h(x.id)+'">'+h(spoolLabel(x))+" · "+h(g(x.remainingG))+"</option>"}).join("");
+      if(id&&candidates.some(function(x){return x.id===id}))byId("usage-spool").value=id;
+      var d=new Date();byId("usage-date").value=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+      byId("usage-dialog").showModal()
+    }
+    function saveSpool(event){
+      event.preventDefault();
+      var sku=byId("spool-sku").value.trim(),brand=byId("spool-brand").value.trim(),material=byId("spool-material").value.trim(),color=byId("spool-color").value.trim(),price=Number(byId("spool-price").value),net=Number(byId("spool-net").value),location=byId("spool-location").value,slot=location==="ams"?Number(byId("spool-slot").value):null;
+      var remaining=location==="fresh"?net:location==="unassigned"?null:Number(byId("spool-remaining").value);
+      var old=editingSpoolId?bySpool(editingSpoolId):null;
+      if(!sku||!brand||!material||!color||!Number.isFinite(price)||price<0||!Number.isFinite(net)||net<=0){toast("Bitte alle Spulendaten prüfen.");return}
+      if(location!=="fresh"&&location!=="unassigned"&&(!byId("spool-remaining").value||!Number.isFinite(remaining))){toast("Bitte den aktuellen Restbestand eintragen.");return}
+      if(remaining!=null&&(remaining<0||remaining>net)){toast("Restmenge muss zwischen 0 und dem vollen Gewicht liegen.");return}
+      if(location==="ams"&&(!slot||state.spools.some(function(x){return x.id!==editingSpoolId&&x.location==="ams"&&x.amsSlot===slot}))){toast("Bitte einen freien AMS-Platz wählen.");return}
+      if(old&&old.everOpened&&location==="fresh"){toast("Eine geöffnete Spule kann nicht als frisch markiert werden. Lege für neue Ware eine neue Spule an.");return}
+      var note=byId("spool-note").value.trim();
+      if(old){
+        var previous=old.remainingG;
+        Object.assign(old,{sku:sku,brand:brand,material:material,color:color,priceKg:price,netG:net,remainingG:remaining,location:location,amsSlot:slot,note:note,everOpened:old.everOpened||location==="opened"||location==="ams"});
+        if(previous!=null&&remaining!=null&&Math.abs(remaining-previous)>0.0001){state.history.push({id:uuid(),type:"adjustment",date:new Date().toISOString().slice(0,10),spoolId:old.id,spoolLabel:spoolLabel(old),deltaG:remaining-previous,cost:(remaining-previous)*price/1000,note:"Restbestand manuell angepasst"})}
+      }else{
+        var count=Number(byId("spool-count").value);if(!Number.isInteger(count)||count<1||count>50){toast("Bitte eine gültige Anzahl eingeben.");return}
+        if(location==="ams"&&count>1){toast("Für einen AMS-Platz kann nur eine Spule angelegt werden.");return}
+        var existing=state.spools.filter(function(x){return x.sku===sku}).map(function(x){return x.copyNo||1});var next=existing.length?Math.max.apply(null,existing)+1:1;
+        for(var i=0;i<count;i++)state.spools.push({id:uuid(),sku:sku,copyNo:next+i,brand:brand,material:material,color:color,priceKg:price,netG:net,remainingG:remaining,location:location,amsSlot:slot,note:note,everOpened:location==="opened"||location==="ams"});
+      }
+      byId("spool-dialog").close();commit();toast(old?"Spule aktualisiert.":"Spule hinzugefügt.")
+    }
+    function saveUsage(event){
+      event.preventDefault();var spool=bySpool(byId("usage-spool").value),grams=Number(byId("usage-grams").value);
+      if(!spool||!Number.isFinite(grams)||grams<=0||grams>spool.remainingG){toast("Verbrauch übersteigt den verfügbaren Restbestand.");return}
+      var product=byId("usage-product").value.trim(),note=byId("usage-note").value.trim(),date=byId("usage-date").value;
+      state.history.push({id:uuid(),type:"consumption",date:date,spoolId:spool.id,spoolLabel:spoolLabel(spool),deltaG:-grams,cost:grams*spool.priceKg/1000,product:product,note:note});
+      spool.remainingG=Math.round((spool.remainingG-grams)*100)/100;if(spool.location==="fresh"){spool.location="opened";spool.everOpened=true}
+      byId("usage-dialog").close();commit();toast(num.format(grams)+" g abgebucht.")
+    }
+    async function saveHtml(){
+      var handle=null;
+      if(window.showSaveFilePicker){try{handle=await window.showSaveFilePicker({suggestedName:"index.html",types:[{description:"HTML-Datei",accept:{"text/html":[".html"]}}]})}catch(e){if(e.name==="AbortError")return}}
+      try{
+        await saveQueue;
+        var envelope=await encryptState(JSON.stringify(state));
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(envelope));
+        var pattern=/(<script id="embedded-data" type="application\/json">)[\s\S]*?(<\/script>)/;
+        if(!pattern.test(sourceHtml))throw Error("HTML-Datenfeld fehlt");
+        var html=sourceHtml.replace(pattern,function(_,start,end){return start+JSON.stringify(envelope)+end});
+        var blob=new Blob([html],{type:"text/html;charset=utf-8"});
+        if(handle){var writable=await handle.createWritable();await writable.write(blob);await writable.close()}
+        else{var url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="index.html";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1000)}
+        byId("save-state").textContent="HTML-Datei erstellt";renderSettings();toast("Aktuelle HTML-Datei gespeichert. Für Netlify bitte neu hochladen.")
+      }catch(e){toast("HTML konnte nicht gespeichert werden: "+e.message)}
+    }
+    function logout(){state=null;key=null;saltBytes=null;byId("login-password").value="";byId("app").hidden=true;byId("login-screen").hidden=false;byId("login-user").focus()}
+    async function login(event){
+      event.preventDefault();var user=byId("login-user").value.trim(),password=byId("login-password").value;
+      byId("login-error").textContent="";
+      if(!window.crypto||!crypto.subtle){byId("login-error").textContent="Dieser Browser unterstützt die nötige Verschlüsselung nicht. Bitte die Seite über HTTPS öffnen.";return}
+      if(user!==USERNAME){byId("login-error").textContent="Benutzername oder Passwort ist falsch.";return}
+      try{
+        var result=await decrypt(newestEnvelope(),password);state=result.state;key=result.key;saltBytes=result.salt;lastSavedAt=Math.max(newestEnvelope().updatedAt,Date.now());byId("login-password").value="";byId("login-screen").hidden=true;byId("app").hidden=false;render();showView("dashboard")
+      }catch(e){byId("login-error").textContent="Benutzername oder Passwort ist falsch."}
+    }
+    document.addEventListener("DOMContentLoaded",function(){
+      sourceHtml="<!doctype html>\n"+document.documentElement.outerHTML;
+      embeddedEnvelope=JSON.parse(byId("embedded-data").textContent);
+      byId("login-form").addEventListener("submit",login);
+      byId("spool-form").addEventListener("submit",saveSpool);
+      byId("usage-form").addEventListener("submit",saveUsage);
+      byId("spool-location").addEventListener("change",updateSpoolFields);
+      byId("spool-net").addEventListener("input",updateSpoolFields);
+      byId("factor-form").addEventListener("submit",function(e){e.preventDefault();var factor=Number(byId("factor-input").value);if(!Number.isFinite(factor)||factor<=0){toast("Bitte einen positiven Faktor eingeben.");return}state.settings.factor=factor;commit();toast("Preisfaktor gespeichert.")});
+      byId("password-form").addEventListener("submit",async function(e){e.preventDefault();var a=byId("new-password").value,b=byId("repeat-password").value;if(a!==b||a.length<12){toast("Die Passwörter müssen übereinstimmen und mindestens 12 Zeichen haben.");return}await saveQueue;var newSalt=crypto.getRandomValues(new Uint8Array(16));var newKey=await derive(a,newSalt);saltBytes=newSalt;key=newKey;await queueSave();byId("password-form").reset();renderSettings();toast("Passwort geändert. Speichere jetzt die aktualisierte HTML-Datei.")});
+      document.addEventListener("click",function(e){
+        var nav=e.target.closest("[data-view]");if(nav&&state){showView(nav.dataset.view);return}
+        var el=e.target.closest("[data-action]");if(!el||!state)return;
+        var action=el.dataset.action,id=el.dataset.id;
+        if(action==="save-html")saveHtml();
+        else if(action==="logout")logout();
+        else if(action==="add-spool")openSpool(null);
+        else if(action==="edit-spool")openSpool(id);
+        else if(action==="add-usage")openUsage(null);
+        else if(action==="consume")openUsage(id);
+        else if(action==="close-dialog")el.closest("dialog").close();
+        else if(action==="add-quote-line"){state.quote.lines.push({id:uuid(),spoolId:"",grams:0});commit()}
+        else if(action==="remove-quote-line"){state.quote.lines=state.quote.lines.filter(function(x){return x.id!==id});commit()}
+        else if(action==="delete-spool"){var s=bySpool(id);if(!s)return;if(!confirm("Spule „"+spoolLabel(s)+"“ wirklich aus dem Bestand entfernen? Verbrauchseinträge bleiben erhalten."))return;state.spools=state.spools.filter(function(x){return x.id!==id});state.quote.lines.forEach(function(x){if(x.spoolId===id)x.spoolId=""});commit();toast("Spule entfernt.")}
+        else if(action==="undo-usage"){var item=state.history.find(function(x){return x.id===id});if(!item||item.type!=="consumption")return;var spool=bySpool(item.spoolId);if(!spool){toast("Die zugehörige Spule existiert nicht mehr.");return}if(!confirm("Verbrauchsbuchung rückgängig machen?"))return;spool.remainingG=Math.min(spool.netG,Math.round((spool.remainingG-item.deltaG)*100)/100);state.history=state.history.filter(function(x){return x.id!==id});commit();toast("Verbrauch zurückgebucht.")}
+      });
+      document.addEventListener("change",function(e){
+        if(!state)return;
+        if(e.target.id==="quote-name"){state.quote.name=e.target.value.trim();queueSave();return}
+        var lineEl=e.target.closest(".quote-line");if(lineEl&&e.target.classList.contains("quote-input")){var line=state.quote.lines.find(function(x){return x.id===lineEl.dataset.line});if(!line)return;if(e.target.dataset.field==="grams"){var value=Number(e.target.value);line.grams=Number.isFinite(value)&&value>=0?value:0}else line.spoolId=e.target.value;commit()}
+      });
+      byId("login-user").focus()
+    })
+  })();
+  </script>
+</body>
+</html>
